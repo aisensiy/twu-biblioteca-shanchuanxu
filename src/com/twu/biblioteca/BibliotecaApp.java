@@ -56,7 +56,7 @@ public class BibliotecaApp {
     }
 
     private void showMainMenu() {
-        String[] options = {"List Books", "Quit"};
+        String[] options = {"[1]List Books", "[0]Quit"};
 
         System.out.println("Select action you want");
         for (String option : options) {
