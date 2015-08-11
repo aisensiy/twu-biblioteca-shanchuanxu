@@ -18,24 +18,6 @@ public class BibliotecaAppTest {
     }
 
     @Test
-    public void getWelcomeWhenStart() {
-        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-        System.setOut(new PrintStream(outputStream));
-
-        app.run();
-        assertTrue(outputStream.toString().startsWith("Welcome"));
-    }
-
-    @Test
-    public void getMainMenuWhenStart() {
-        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-        System.setOut(new PrintStream(outputStream));
-
-        app.run();
-        assertTrue(outputStream.toString().indexOf("List Books") != -1);
-    }
-
-    @Test
     public void bookShouldIncheckedoutBooksAfterCheckout() {
         assertEquals(0, app.getCheckedoutBooks().size());
         app.checkoutBook(app.getBooks().get(0).getTitle());
