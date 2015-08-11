@@ -78,7 +78,7 @@ public class BibliotecaApp {
 
     private void checkoutBookCmd() {
         String bookTitle = userInputHandler.getInput("Input The Book Name:");
-        if (checkoutBook(bookTitle)) {
+        if (checkoutEntity(bookTitle)) {
             System.out.println(String.format("Checkout book [%s] successfully!", bookTitle));
         } else {
             System.out.println(String.format("Failed to checkout book [%s]", bookTitle));
@@ -87,15 +87,15 @@ public class BibliotecaApp {
 
     private void returnBookCmd() {
         String bookTitle = userInputHandler.getInput("Input The Book Name:");
-        if (returnBook(bookTitle)) {
+        if (returnEntity(bookTitle)) {
             System.out.println(String.format("Return book [%s] successfully!", bookTitle));
         } else {
             System.out.println(String.format("Failed to return book [%s]", bookTitle));
         }
     }
 
-    public boolean checkoutBook(String bookTitle) {
-        int idx = indexOfBookByTitle(bookTitle, books);
+    public boolean checkoutEntity(String entityTitle) {
+        int idx = indexOfEntityByTitle(entityTitle, books);
         Book book = books.get(idx);
         if (idx != -1 && book.getOwner() == null) {
             book.setOwner(currentUser);
@@ -106,9 +106,9 @@ public class BibliotecaApp {
         }
     }
 
-    private int indexOfBookByTitle(String bookTitle, List<Book> books) {
+    private int indexOfEntityByTitle(String entityTitle, List<Book> books) {
         for (int i = 0; i < books.size(); i++) {
-            if (books.get(i).getTitle().equals(bookTitle)) {
+            if (books.get(i).getTitle().equals(entityTitle)) {
                 return i;
             }
         }
@@ -138,8 +138,8 @@ public class BibliotecaApp {
         }
     }
 
-    public boolean returnBook(String bookTitle) {
-        int idx = indexOfBookByTitle(bookTitle, books);
+    public boolean returnEntity(String bookTitle) {
+        int idx = indexOfEntityByTitle(bookTitle, books);
         Book book = books.get(idx);
         if (idx != -1 && book.getOwner().equals(currentUser)) {
             book.setOwner(null);

@@ -21,29 +21,29 @@ public class BibliotecaAppTest {
     @Test
     public void bookShouldGetOwnerAfterCheckout() {
         app.setCurrentUser(new User("111-1112", "xxxxxx"));
-        app.checkoutBook("Head First Java");
+        app.checkoutEntity("Head First Java");
         assertEquals("111-1112", book1.getOwner().getNumber());
     }
 
     @Test
-    public void bookShouldHaveNoOwnerAfterCheckout() {
+    public void bookShouldHaveNoOwnerAfterReturn() {
         app.setCurrentUser(new User("111-1111", "xxxxxx"));
-        app.checkoutBook("Abc");
-        assertEquals(null, book1.getOwner().getNumber());
+        app.returnEntity("Abc");
+        assertEquals(null, book2.getOwner());
     }
 
     @Test
-    public void bookReturnedShouldNotInCheckedoutBooks() {
+    public void bookCanOnlyReturnByItsOwner() {
         BibliotecaApp app = initApp();
         app.setCurrentUser(new User("111-1112", "xxxxxx"));
-        assertEquals(false, app.returnBook("Abc"));
+        assertEquals(false, app.returnEntity("Abc"));
     }
 
     @Test
     public void bookCannotBeCheckoutIfIsAlreadyCheckedout() {
         BibliotecaApp app = initApp();
         app.setCurrentUser(new User("111-1112", "xxxxxx"));
-        assertEquals(false, app.checkoutBook("Abc"));
+        assertEquals(false, app.checkoutEntity("Abc"));
     }
 
     private BibliotecaApp initApp() {
