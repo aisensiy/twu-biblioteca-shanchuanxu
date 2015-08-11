@@ -6,11 +6,17 @@ import java.util.List;
 public class BibliotecaApp {
 
     private List<Book> books;
+    private List<Movie> movies;
+
     private UserInputHandler userInputHandler;
     private User currentUser;
 
     public List<Book> getBooks() {
         return books;
+    }
+
+    public List<Movie> getMovies() {
+        return movies;
     }
 
     public User getCurrentUser() {
@@ -26,8 +32,9 @@ public class BibliotecaApp {
         prepareUserInputHandler();
     }
 
-    public BibliotecaApp(List<Book> books) {
+    public BibliotecaApp(List<Book> books, List<Movie> movies) {
         this.books = books;
+        this.movies = movies;
     }
 
     private void prepareUserInputHandler() {
@@ -41,6 +48,7 @@ public class BibliotecaApp {
 
     public void init() {
         books = new ArrayList<>();
+        movies = new ArrayList<>();
     }
 
     public void run() {
@@ -78,7 +86,7 @@ public class BibliotecaApp {
 
     private void checkoutBookCmd() {
         String bookTitle = userInputHandler.getInput("Input The Book Name:");
-        if (checkoutEntity(bookTitle)) {
+        if (checkoutEntity(bookTitle, books)) {
             System.out.println(String.format("Checkout book [%s] successfully!", bookTitle));
         } else {
             System.out.println(String.format("Failed to checkout book [%s]", bookTitle));
@@ -87,28 +95,28 @@ public class BibliotecaApp {
 
     private void returnBookCmd() {
         String bookTitle = userInputHandler.getInput("Input The Book Name:");
-        if (returnEntity(bookTitle)) {
+        if (returnEntity(bookTitle, books)) {
             System.out.println(String.format("Return book [%s] successfully!", bookTitle));
         } else {
             System.out.println(String.format("Failed to return book [%s]", bookTitle));
         }
     }
 
-    public boolean checkoutEntity(String entityTitle) {
-        int idx = indexOfEntityByTitle(entityTitle, books);
-        Book book = books.get(idx);
-        if (idx != -1 && book.getOwner() == null) {
-            book.setOwner(currentUser);
-            books.remove(idx);
+    public <E extends LibraryEntity> boolean checkoutEntity(String entityTitle, List<E> entities) {
+        int idx = indexOfEntityByTitle(entityTitle, entities);
+        E entity = entities.get(idx);
+        if (idx != -1 && entity.getOwner() == null) {
+            entity.setOwner(currentUser);
+            entities.remove(idx);
             return true;
         } else {
             return false;
         }
     }
 
-    private int indexOfEntityByTitle(String entityTitle, List<Book> books) {
-        for (int i = 0; i < books.size(); i++) {
-            if (books.get(i).getTitle().equals(entityTitle)) {
+    private <E extends LibraryEntity> int indexOfEntityByTitle(String entityTitle, List<E> entities) {
+        for (int i = 0; i < entities.size(); i++) {
+            if (entities.get(i).getTitle().equals(entityTitle)) {
                 return i;
             }
         }
@@ -138,11 +146,11 @@ public class BibliotecaApp {
         }
     }
 
-    public boolean returnEntity(String bookTitle) {
-        int idx = indexOfEntityByTitle(bookTitle, books);
-        Book book = books.get(idx);
-        if (idx != -1 && book.getOwner().equals(currentUser)) {
-            book.setOwner(null);
+    public <E extends LibraryEntity> boolean returnEntity(String bookTitle, List<E> entities) {
+        int idx = indexOfEntityByTitle(bookTitle, entities);
+        LibraryEntity entity = entities.get(idx);
+        if (idx != -1 && entity.getOwner().equals(currentUser)) {
+            entity.setOwner(null);
             return true;
         } else {
             return false;
