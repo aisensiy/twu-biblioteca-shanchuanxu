@@ -51,6 +51,8 @@ public class BibliotecaApp {
     public void init() {
         books = new ArrayList<>();
         movies = new ArrayList<>();
+        users = new ArrayList<>();
+        users.add(new User("111-1111", "xxxxxx"));
     }
 
     public void run() {
@@ -87,8 +89,23 @@ public class BibliotecaApp {
                 checkoutMovieCmd(); break;
             case 6:
                 returnMovieCmd(); break;
+            case 7:
+                loginCmd(); break;
             default:
                 System.out.println("Select a valid option!");
+        }
+    }
+
+    private void loginCmd() {
+        String number = userInputHandler.getInput("Number:");
+        String password = userInputHandler.getInput("Password:");
+        User u = new User(number, password);
+        u = u.login(this);
+        if (u != null) {
+            System.out.println("Login Success!");
+            this.setCurrentUser(u);
+        } else {
+            System.out.println("Login Failed!");
         }
     }
 
@@ -167,6 +184,7 @@ public class BibliotecaApp {
         String[] options = {
                 "[1]List Books", "[2]Check out book", "[3]Return book",
                 "[4]List Movies", "[5]Check out movie", "[6]Return movie",
+                "[7]Login",
                 "[0]Quit"};
 
         System.out.println("Select action you want");
