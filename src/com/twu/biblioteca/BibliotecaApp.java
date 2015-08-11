@@ -6,7 +6,16 @@ import java.util.List;
 public class BibliotecaApp {
 
     private List<Book> books;
+    private List<Book> checkedoutBooks;
     private UserInputHandler userInputHandler;
+
+    public List<Book> getBooks() {
+        return books;
+    }
+
+    public List<Book> getCheckedoutBooks() {
+        return checkedoutBooks;
+    }
 
     public BibliotecaApp() {
         initData();
@@ -23,6 +32,8 @@ public class BibliotecaApp {
         books.add(new Book("Head First Java", 2005, "A"));
         books.add(new Book("Test Driven Dev", 2002, "Kent"));
         books.add(new Book("Abc", 2010, "B"));
+
+        checkedoutBooks = new ArrayList<>();
     }
 
     public void run() {
@@ -50,28 +61,39 @@ public class BibliotecaApp {
             case 1:
                 listBooks(); break;
             case 2:
-                checkoutBook(); break;
+                checkoutBookCmd(); break;
             default:
                 System.out.println("Select a valid option!");
         }
     }
 
-    private void checkoutBook() {
+    private void checkoutBookCmd() {
         String bookTitle = userInputHandler.getInput("Input The Book Name:");
-        if (bookListContains(bookTitle)) {
+        if (checkoutBook(bookTitle)) {
             System.out.println(String.format("Checkout book [%s] successfully!", bookTitle));
         } else {
             System.out.println(String.format("Failed to checkout book [%s]", bookTitle));
         }
     }
 
-    private boolean bookListContains(String bookTitle) {
-        for (Book book : books) {
-            if (book.getTitle().equals(bookTitle)) {
-                return true;
+    public boolean checkoutBook(String bookTitle) {
+        int idx = indexOfBookByTitle(bookTitle);
+        if (idx != -1) {
+            checkedoutBooks.add(books.get(idx));
+            books.remove(idx);
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    private int indexOfBookByTitle(String bookTitle) {
+        for (int i = 0; i < books.size(); i++) {
+            if (books.get(i).getTitle().equals(bookTitle)) {
+                return i;
             }
         }
-        return false;
+        return -1;
     }
 
 
