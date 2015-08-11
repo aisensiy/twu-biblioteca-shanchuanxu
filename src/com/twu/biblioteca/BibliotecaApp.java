@@ -19,6 +19,15 @@ public class BibliotecaApp {
 
     public BibliotecaApp() {
         initData();
+        prepareUserInputHandler();
+    }
+
+    public BibliotecaApp(List<Book> books, List<Book> checkedoutBooks) {
+        this.books = books;
+        this.checkedoutBooks = checkedoutBooks;
+    }
+
+    private void prepareUserInputHandler() {
         userInputHandler = new UserInputHandler();
     }
 
@@ -62,6 +71,8 @@ public class BibliotecaApp {
                 listBooks(); break;
             case 2:
                 checkoutBookCmd(); break;
+            case 3:
+                returnBookCmd(); break;
             default:
                 System.out.println("Select a valid option!");
         }
@@ -76,8 +87,17 @@ public class BibliotecaApp {
         }
     }
 
+    private void returnBookCmd() {
+        String bookTitle = userInputHandler.getInput("Input The Book Name:");
+        if (returnBook(bookTitle)) {
+            System.out.println(String.format("Return book [%s] successfully!", bookTitle));
+        } else {
+            System.out.println(String.format("Failed to return book [%s]", bookTitle));
+        }
+    }
+
     public boolean checkoutBook(String bookTitle) {
-        int idx = indexOfBookByTitle(bookTitle);
+        int idx = indexOfBookByTitle(bookTitle, books);
         if (idx != -1) {
             checkedoutBooks.add(books.get(idx));
             books.remove(idx);
@@ -87,7 +107,7 @@ public class BibliotecaApp {
         }
     }
 
-    private int indexOfBookByTitle(String bookTitle) {
+    private int indexOfBookByTitle(String bookTitle, List<Book> books) {
         for (int i = 0; i < books.size(); i++) {
             if (books.get(i).getTitle().equals(bookTitle)) {
                 return i;
@@ -103,7 +123,7 @@ public class BibliotecaApp {
     }
 
     private void showMainMenu() {
-        String[] options = {"[1]List Books", "[2]Check out book", "[0]Quit"};
+        String[] options = {"[1]List Books", "[2]Check out book", "[3]Return book", "[0]Quit"};
 
         System.out.println("Select action you want");
         for (String option : options) {
@@ -114,6 +134,17 @@ public class BibliotecaApp {
     private void listBooks() {
         for (Book book : books) {
             System.out.println(book);
+        }
+    }
+
+    public boolean returnBook(String bookTitle) {
+        int idx = indexOfBookByTitle(bookTitle, checkedoutBooks);
+        if (idx != -1) {
+            books.add(checkedoutBooks.get(idx));
+            checkedoutBooks.remove(idx);
+            return true;
+        } else {
+            return false;
         }
     }
 }
