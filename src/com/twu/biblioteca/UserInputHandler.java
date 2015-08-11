@@ -4,15 +4,13 @@ import java.io.BufferedReader;
 import java.io.InputStreamReader;
 
 public class UserInputHandler {
-    public int getInput(String prompt) {
-        int result = 0;
-        String line;
+    public String getInput(String prompt) {
+        String result = null;
         System.out.print(prompt);
 
         try {
             BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-            line = br.readLine();
-            result = Integer.parseInt(line);
+            result = br.readLine();
         } catch (Exception e) {
             e.printStackTrace();
         } finally {

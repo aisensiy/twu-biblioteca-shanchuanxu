@@ -28,4 +28,5 @@ public class BibliotecaAppTest {
         app.run();
         assertTrue(outputStream.toString().indexOf("List Books") != -1);
     }
+
 }

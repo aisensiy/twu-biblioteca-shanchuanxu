@@ -6,9 +6,11 @@ import java.util.List;
 public class BibliotecaApp {
 
     private List<Book> books;
+    private UserInputHandler userInputHandler;
 
     public BibliotecaApp() {
         initData();
+        userInputHandler = new UserInputHandler();
     }
 
     public static void main(String[] args) {
@@ -25,6 +27,7 @@ public class BibliotecaApp {
 
     public void run() {
         boolean alive = true;
+        String line = null;
         int cmd;
         UserInputHandler userInputHandler = new UserInputHandler();
 
@@ -32,7 +35,8 @@ public class BibliotecaApp {
         showMainMenu();
 
         while (alive == true) {
-            cmd = userInputHandler.getInput("Select One Option:");
+            line = userInputHandler.getInput("Select One Option:");
+            cmd = Integer.parseInt(line);
             if (cmd == 0) {
                 alive = false;
             } else {
@@ -45,10 +49,31 @@ public class BibliotecaApp {
         switch (cmd) {
             case 1:
                 listBooks(); break;
+            case 2:
+                checkoutBook(); break;
             default:
                 System.out.println("Select a valid option!");
         }
     }
+
+    private void checkoutBook() {
+        String bookTitle = userInputHandler.getInput("Input The Book Name:");
+        if (bookListContains(bookTitle)) {
+            System.out.println(String.format("Checkout book [%s] successfully!", bookTitle));
+        } else {
+            System.out.println(String.format("Failed to checkout book [%s]", bookTitle));
+        }
+    }
+
+    private boolean bookListContains(String bookTitle) {
+        for (Book book : books) {
+            if (book.getTitle().equals(bookTitle)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
 
     private void welcome() {
         String msg = "Welcome";
@@ -56,7 +81,7 @@ public class BibliotecaApp {
     }
 
     private void showMainMenu() {
-        String[] options = {"[1]List Books", "[0]Quit"};
+        String[] options = {"[1]List Books", "[2]Check out book", "[0]Quit"};
 
         System.out.println("Select action you want");
         for (String option : options) {

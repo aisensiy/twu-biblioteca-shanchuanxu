@@ -5,6 +5,10 @@ public class Book {
     private int publishedYear;
     private String author;
 
+    public String getTitle() {
+        return title;
+    }
+
     public Book(String title, int publishedYear, String author) {
         this.title = title;
         this.publishedYear = publishedYear;
