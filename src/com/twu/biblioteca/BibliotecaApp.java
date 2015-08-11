@@ -6,25 +6,28 @@ import java.util.List;
 public class BibliotecaApp {
 
     private List<Book> books;
-    private List<Book> checkedoutBooks;
     private UserInputHandler userInputHandler;
+    private User currentUser;
 
     public List<Book> getBooks() {
         return books;
     }
 
-    public List<Book> getCheckedoutBooks() {
-        return checkedoutBooks;
+    public User getCurrentUser() {
+        return currentUser;
+    }
+
+    public void setCurrentUser(User currentUser) {
+        this.currentUser = currentUser;
     }
 
     public BibliotecaApp() {
-        initData();
+        init();
         prepareUserInputHandler();
     }
 
-    public BibliotecaApp(List<Book> books, List<Book> checkedoutBooks) {
+    public BibliotecaApp(List<Book> books) {
         this.books = books;
-        this.checkedoutBooks = checkedoutBooks;
     }
 
     private void prepareUserInputHandler() {
@@ -36,13 +39,8 @@ public class BibliotecaApp {
         app.run();
     }
 
-    public void initData() {
+    public void init() {
         books = new ArrayList<>();
-        books.add(new Book("Head First Java", 2005, "A"));
-        books.add(new Book("Test Driven Dev", 2002, "Kent"));
-        books.add(new Book("Abc", 2010, "B"));
-
-        checkedoutBooks = new ArrayList<>();
     }
 
     public void run() {
@@ -98,8 +96,9 @@ public class BibliotecaApp {
 
     public boolean checkoutBook(String bookTitle) {
         int idx = indexOfBookByTitle(bookTitle, books);
-        if (idx != -1) {
-            checkedoutBooks.add(books.get(idx));
+        Book book = books.get(idx);
+        if (idx != -1 && book.getOwner() == null) {
+            book.setOwner(currentUser);
             books.remove(idx);
             return true;
         } else {
@@ -133,15 +132,17 @@ public class BibliotecaApp {
 
     private void listBooks() {
         for (Book book : books) {
-            System.out.println(book);
+            if (book.getOwner() == null) {
+                System.out.println(book);
+            }
         }
     }
 
     public boolean returnBook(String bookTitle) {
-        int idx = indexOfBookByTitle(bookTitle, checkedoutBooks);
-        if (idx != -1) {
-            books.add(checkedoutBooks.get(idx));
-            checkedoutBooks.remove(idx);
+        int idx = indexOfBookByTitle(bookTitle, books);
+        Book book = books.get(idx);
+        if (idx != -1 && book.getOwner().equals(currentUser)) {
+            book.setOwner(null);
             return true;
         } else {
             return false;

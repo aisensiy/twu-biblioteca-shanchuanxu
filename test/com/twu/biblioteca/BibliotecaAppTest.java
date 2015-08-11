@@ -3,9 +3,6 @@ package com.twu.biblioteca;
 import org.junit.Before;
 import org.junit.Test;
 
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.PrintStream;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -13,46 +10,51 @@ import static org.junit.Assert.*;
 
 public class BibliotecaAppTest {
     private BibliotecaApp app;
+    private Book book1;
+    private Book book2;
 
-    @Test
-    public void bookShouldIncheckedoutBooksAfterCheckout() {
-        BibliotecaApp app = new BibliotecaApp();
-        assertEquals(0, app.getCheckedoutBooks().size());
-        app.checkoutBook(app.getBooks().get(0).getTitle());
-        assertEquals(1, app.getCheckedoutBooks().size());
+    @Before
+    public void setUp() throws Exception {
+        app = initApp();
     }
 
     @Test
-    public void bookShouldRemovedFromBooksAfterCheckout() {
-        BibliotecaApp app = new BibliotecaApp();
-        assertEquals(3, app.getBooks().size());
-        app.checkoutBook(app.getBooks().get(0).getTitle());
-        assertEquals(2, app.getBooks().size());
+    public void bookShouldGetOwnerAfterCheckout() {
+        app.setCurrentUser(new User("111-1112", "xxxxxx"));
+        app.checkoutBook("Head First Java");
+        assertEquals("111-1112", book1.getOwner().getNumber());
     }
 
     @Test
-    public void bookReturnedShouldInBooks() {
-        BibliotecaApp app = getTestBibliotecaAppWithCheckedoutBooks();
-
-        app.returnBook("Abc");
-        assertEquals(3, app.getBooks().size());
+    public void bookShouldHaveNoOwnerAfterCheckout() {
+        app.setCurrentUser(new User("111-1111", "xxxxxx"));
+        app.checkoutBook("Abc");
+        assertEquals(null, book1.getOwner().getNumber());
     }
 
     @Test
     public void bookReturnedShouldNotInCheckedoutBooks() {
-        BibliotecaApp app = getTestBibliotecaAppWithCheckedoutBooks();
-        app.returnBook("Abc");
-        assertEquals(0, app.getCheckedoutBooks().size());
+        BibliotecaApp app = initApp();
+        app.setCurrentUser(new User("111-1112", "xxxxxx"));
+        assertEquals(false, app.returnBook("Abc"));
     }
 
-    private BibliotecaApp getTestBibliotecaAppWithCheckedoutBooks() {
+    @Test
+    public void bookCannotBeCheckoutIfIsAlreadyCheckedout() {
+        BibliotecaApp app = initApp();
+        app.setCurrentUser(new User("111-1112", "xxxxxx"));
+        assertEquals(false, app.checkoutBook("Abc"));
+    }
+
+    private BibliotecaApp initApp() {
         List<Book> books = new ArrayList<>();
-        books.add(new Book("Head First Java", 2005, "A"));
-        books.add(new Book("Test Driven Dev", 2002, "Kent"));
+        book1 = new Book("Head First Java", 2005, "A");
+        books.add(book1);
 
-        List<Book> checkedoutBooks = new ArrayList<>();
-        checkedoutBooks.add(new Book("Abc", 2010, "B"));
+        book2 = new Book("Abc", 2010, "B");
+        book2.setOwner(new User("111-1111", "xxxxxx"));
+        books.add(book2);
 
-        return new BibliotecaApp(books, checkedoutBooks);
+        return new BibliotecaApp(books);
     }
 }
