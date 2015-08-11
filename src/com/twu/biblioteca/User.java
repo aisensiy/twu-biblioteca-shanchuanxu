@@ -3,10 +3,12 @@ package com.twu.biblioteca;
 public class User {
     private String number;
     private String password;
+    private UserInputHandler userInputHandler;
 
     public User(String number, String password) {
         this.number = number;
         this.password = password;
+        userInputHandler = new UserInputHandler();
     }
 
     public String getNumber() {
@@ -27,5 +29,13 @@ public class User {
     @Override
     public int hashCode() {
         return getNumber().hashCode();
+    }
+
+    public User login(BibliotecaApp app) {
+        return app.indexOfUserByNumberAndPassword(number, password);
+    }
+
+    public boolean checkPassword(String password) {
+        return this.password.equals(password);
     }
 }

@@ -7,9 +7,21 @@ public class BibliotecaApp {
 
     private List<Book> books;
     private List<Movie> movies;
+    private List<User> users;
 
     private UserInputHandler userInputHandler;
     private User currentUser;
+
+    public BibliotecaApp() {
+        init();
+        prepareUserInputHandler();
+    }
+
+    public BibliotecaApp(List<Book> books, List<Movie> movies, List<User> users) {
+        this.books = books;
+        this.movies = movies;
+        this.users = users;
+    }
 
     public List<Book> getBooks() {
         return books;
@@ -25,16 +37,6 @@ public class BibliotecaApp {
 
     public void setCurrentUser(User currentUser) {
         this.currentUser = currentUser;
-    }
-
-    public BibliotecaApp() {
-        init();
-        prepareUserInputHandler();
-    }
-
-    public BibliotecaApp(List<Book> books, List<Movie> movies) {
-        this.books = books;
-        this.movies = movies;
     }
 
     private void prepareUserInputHandler() {
@@ -190,5 +192,14 @@ public class BibliotecaApp {
         } else {
             return false;
         }
+    }
+
+    public User indexOfUserByNumberAndPassword(String number, String password) {
+        for (User user : users) {
+            if (user.getNumber().equals(number) && user.checkPassword(password)) {
+                return user;
+            }
+        }
+        return null;
     }
 }

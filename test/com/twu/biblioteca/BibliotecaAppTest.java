@@ -92,6 +92,6 @@ public class BibliotecaAppTest {
         movie2.setOwner(new User("111-1111", "xxxxxx"));
         movies.add(movie2);
 
-        return new BibliotecaApp(books, movies);
+        return new BibliotecaApp(books, movies, new ArrayList<User>());
     }
 }
