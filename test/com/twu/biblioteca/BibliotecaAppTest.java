@@ -18,4 +18,14 @@ public class BibliotecaAppTest {
         app.run();
         assertTrue(outputStream.toString().startsWith("Welcome"));
     }
+
+    @Test
+    public void getMainMenuWhenStart() {
+        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+        System.setOut(new PrintStream(outputStream));
+
+        BibliotecaApp app = new BibliotecaApp();
+        app.run();
+        assertTrue(outputStream.toString().indexOf("List Books") != -1);
+    }
 }
