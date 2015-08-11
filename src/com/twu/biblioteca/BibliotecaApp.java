@@ -50,9 +50,16 @@ public class BibliotecaApp {
 
     public void init() {
         books = new ArrayList<>();
+        books.add(new Book("A", 2011, "A"));
         movies = new ArrayList<>();
         users = new ArrayList<>();
-        users.add(new User("111-1111", "xxxxxx"));
+        users.add(new Librarian("111-1111", "xxxxxx"));
+        Customer c = new Customer("111-1112", "123");
+        c.setAddress("Beijing");
+        c.setEmail("aisensiy@163.com");
+        c.setName("Xu");
+        c.setPhoneNumber("+86-18511700000");
+        users.add(c);
     }
 
     public void run() {
@@ -91,6 +98,8 @@ public class BibliotecaApp {
                 returnMovieCmd(); break;
             case 7:
                 loginCmd(); break;
+            case 8:
+                showCheckedoutBooksCmd(); break;
             default:
                 System.out.println("Select a valid option!");
         }
@@ -158,7 +167,6 @@ public class BibliotecaApp {
         if (idx != -1 && entities.get(idx).getOwner() == null) {
             E entity = entities.get(idx);
             entity.setOwner(currentUser);
-            entities.remove(idx);
             return true;
         } else {
             return false;
@@ -185,6 +193,7 @@ public class BibliotecaApp {
                 "[1]List Books", "[2]Check out book", "[3]Return book",
                 "[4]List Movies", "[5]Check out movie", "[6]Return movie",
                 "[7]Login",
+                "[8]Show check-out books",
                 "[0]Quit"};
 
         System.out.println("Select action you want");
@@ -220,4 +229,14 @@ public class BibliotecaApp {
         }
         return null;
     }
+
+    public void showCheckedoutBooksCmd() {
+        System.out.println("Checkedout Books:");
+        for (Book book : books) {
+            if (book.getOwner() != null) {
+                System.out.println(book);
+            }
+        }
+    }
+
 }
