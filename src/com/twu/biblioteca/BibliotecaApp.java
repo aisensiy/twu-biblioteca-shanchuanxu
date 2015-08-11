@@ -1,10 +1,26 @@
 package com.twu.biblioteca;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class BibliotecaApp {
+
+    private List<Book> books;
+
+    public BibliotecaApp() {
+        initData();
+    }
 
     public static void main(String[] args) {
         BibliotecaApp app = new BibliotecaApp();
         app.run();
+    }
+
+    public void initData() {
+        books = new ArrayList<>();
+        books.add(new Book("Head First Java", 2005, "A"));
+        books.add(new Book("Test Driven Dev", 2002, "Kent"));
+        books.add(new Book("Abc", 2010, "B"));
     }
 
     public void run() {
@@ -28,7 +44,7 @@ public class BibliotecaApp {
     private void handleCmd(int cmd) {
         switch (cmd) {
             case 1:
-                System.out.println("Show books"); break;
+                listBooks(); break;
             default:
                 System.out.println("Select a valid option!");
         }
@@ -45,6 +61,12 @@ public class BibliotecaApp {
         System.out.println("Select action you want");
         for (String option : options) {
             System.out.println(option);
+        }
+    }
+
+    private void listBooks() {
+        for (Book book : books) {
+            System.out.println(book);
         }
     }
 }
