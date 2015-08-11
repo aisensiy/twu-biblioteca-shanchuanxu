@@ -79,8 +79,22 @@ public class BibliotecaApp {
                 checkoutBookCmd(); break;
             case 3:
                 returnBookCmd(); break;
+            case 4:
+                listMovies(); break;
+            case 5:
+                checkoutMovieCmd(); break;
+            case 6:
+                returnMovieCmd(); break;
             default:
                 System.out.println("Select a valid option!");
+        }
+    }
+
+    private void listMovies() {
+        for (Movie movie : movies) {
+            if (movie.getOwner() == null) {
+                System.out.println(movie);
+            }
         }
     }
 
@@ -90,6 +104,24 @@ public class BibliotecaApp {
             System.out.println(String.format("Checkout book [%s] successfully!", bookTitle));
         } else {
             System.out.println(String.format("Failed to checkout book [%s]", bookTitle));
+        }
+    }
+
+    private void checkoutMovieCmd() {
+        String movieTitle = userInputHandler.getInput("Input The Movie Name:");
+        if (checkoutEntity(movieTitle, movies)) {
+            System.out.println(String.format("Checkout Movie [%s] successfully!", movieTitle));
+        } else {
+            System.out.println(String.format("Failed to checkout movie [%s]", movieTitle));
+        }
+    }
+
+    private void returnMovieCmd() {
+        String movieTitle = userInputHandler.getInput("Input The Movie Name:");
+        if (returnEntity(movieTitle, movies)) {
+            System.out.println(String.format("Return movie [%s] successfully!", movieTitle));
+        } else {
+            System.out.println(String.format("Failed to return movie [%s]", movieTitle));
         }
     }
 
@@ -104,8 +136,8 @@ public class BibliotecaApp {
 
     public <E extends LibraryEntity> boolean checkoutEntity(String entityTitle, List<E> entities) {
         int idx = indexOfEntityByTitle(entityTitle, entities);
-        E entity = entities.get(idx);
-        if (idx != -1 && entity.getOwner() == null) {
+        if (idx != -1 && entities.get(idx).getOwner() == null) {
+            E entity = entities.get(idx);
             entity.setOwner(currentUser);
             entities.remove(idx);
             return true;
@@ -130,7 +162,10 @@ public class BibliotecaApp {
     }
 
     private void showMainMenu() {
-        String[] options = {"[1]List Books", "[2]Check out book", "[3]Return book", "[0]Quit"};
+        String[] options = {
+                "[1]List Books", "[2]Check out book", "[3]Return book",
+                "[4]List Movies", "[5]Check out movie", "[6]Return movie",
+                "[0]Quit"};
 
         System.out.println("Select action you want");
         for (String option : options) {
