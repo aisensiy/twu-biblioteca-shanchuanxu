@@ -100,6 +100,8 @@ public class BibliotecaApp {
                 loginCmd(); break;
             case 8:
                 showCheckedoutBooksCmd(); break;
+            case 9:
+                showUserInfoCmd(); break;
             default:
                 System.out.println("Select a valid option!");
         }
@@ -194,6 +196,7 @@ public class BibliotecaApp {
                 "[4]List Movies", "[5]Check out movie", "[6]Return movie",
                 "[7]Login",
                 "[8]Show check-out books",
+                "[9]Show user info",
                 "[0]Quit"};
 
         System.out.println("Select action you want");
@@ -239,4 +242,9 @@ public class BibliotecaApp {
         }
     }
 
+    private void showUserInfoCmd() {
+        if (getCurrentUser() instanceof Customer) {
+            System.out.println(getCurrentUser().toString());
+        }
+    }
 }
